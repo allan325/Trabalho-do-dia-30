@@ -1,7 +1,7 @@
 #!/bin/bash
 
 while true; do
-    read -r -p "Escolha: 1 Renomear arquivo | 2 Criar copias de pasta | 3 Verificar espaço | 4 Arquivos antigos | 0 pra parar: " tipo
+    read -r -p "Escolha: 1 Renomear arquivo | 2 Criar copias de arquivos | 3 Verificar espaço | 4 Arquivos antigos | 0 pra parar: " tipo
 
     case "$tipo" in
         0)
