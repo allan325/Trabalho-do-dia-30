@@ -1,0 +1,135 @@
+#!/bin/bash
+
+while true; do
+    read -r -p "Escolha: 1 Renomear arquivo | 2 Criar copias de pasta | 3 Verificar espaço | 4 Arquivos antigos | 0 pra parar: " tipo
+
+    case "$tipo" in
+        0)
+            break
+            ;;
+
+        1)
+            read -r -p "Digite o nome do arquivo que vc quer mudar: " origem
+            read -r -p "Digite o novo nome do arquivo: " novo
+
+            if [ ! -f "$origem" ]; then
+                echo "Arquivo nao encontrado"
+            else
+                if [ -e "$novo" ]; then
+                    echo "Ja existe um arquivo ou diretorio com esse nome"
+                else
+                    if mv -- "$origem" "$novo"; then
+                        echo "Voce mudou o nome do arquivo $origem para $novo"
+                    else
+                        echo "Erro ao renomear o arquivo"
+                    fi
+                fi
+            fi
+            ;;
+
+        2)
+            read -r -p "Digite o nome do arquivo que vc quer fazer a copia: " origem
+            read -r -p "Digite o nome da copia: " novo
+
+            if [ ! -f "$origem" ]; then
+                echo "Arquivo nao encontrado"
+            else
+                if [ -e "$novo" ]; then
+                    echo "Ja existe um arquivo ou diretorio com esse nome"
+                else
+                    if cp -- "$origem" "$novo"; then
+                        echo "Voce fez uma copia do arquivo $origem é o nome é $novo"
+                    else
+                        echo "Erro em fazer copia o arquivo"
+                    fi
+                fi
+            fi
+            ;;
+
+        3)
+           
+        3)
+            while true; do
+                read -r -p "Escolha: 1 Espaco em disco | 2 Tamanho de uma pasta | 3 Tamanho das pastas | 4 Maiores itens | 5 Discos e particoes | 0 pra parar: " resposta
+
+                case "$resposta" in
+                    0)
+                        break
+                        ;;
+
+                    1)
+                        df -h
+                        ;;
+
+                    2)
+                        read -r -p "Digite o nome da pasta que voce quer ver: " pasta
+
+                        if [ -d "$pasta" ]; then
+                            du -sh "$pasta"
+                        else
+                            caminho=$(find "$HOME" -type d -iname "$pasta" -print -quit 2>/dev/null)
+
+                            if [ -n "$caminho" ]; then
+                                du -sh "$caminho"
+                            else
+                                echo "Essa pasta nao existe"
+                            fi
+                        fi
+                        ;;
+
+                    3)
+                        read -r -p "Digite o nome da pasta que voce quer ver: " pasta
+
+                        if [ -d "$pasta" ]; then
+                            du -h --max-depth=1 "$pasta"
+                        else
+                            caminho=$(find "$HOME" -type d -iname "$pasta" -print -quit 2>/dev/null)
+
+                            if [ -n "$caminho" ]; then
+                                du -h --max-depth=1 "$caminho"
+                            else
+                                echo "Essa pasta nao existe"
+                            fi
+                        fi
+                        ;;
+
+                    4)
+                        read -r -p "Digite o nome da pasta que voce quer ver: " pasta
+
+                        if [ -d "$pasta" ]; then
+                            du -ah "$pasta" 2>/dev/null | sort -rh | head -20
+                        else
+                            caminho=$(find "$HOME" -type d -iname "$pasta" -print -quit 2>/dev/null)
+
+                            if [ -n "$caminho" ]; then
+                                du -ah "$caminho" 2>/dev/null | sort -rh | head -20
+                            else
+                                echo "Essa pasta nao existe"
+                            fi
+                        fi
+                        ;;
+
+                    5)
+                        lsblk
+                        ;;
+
+                    *)
+                        echo "Digite uma opcao de 0 a 5"
+                        ;;
+                esac
+            done
+            ;;
+
+            ;;
+
+        4)
+            echo "Procurando arquivos e pasta com mais de 30 dias"
+            find  "$HOME"  -mtime +30 -print 2>/dev/null
+            echo "Busca finalizada."
+            ;;
+
+        *)
+            echo "Digite uma opção de 0 a 4"
+            ;;
+    esac
+done
