@@ -44,10 +44,7 @@ while true; do
                     fi
                 fi
             fi
-            ;;
-
-        3)
-           
+            ;;           
         3)
             while true; do
                 read -r -p "Escolha: 1 Espaco em disco | 2 Tamanho de uma pasta | 3 Tamanho das pastas | 4 Maiores itens | 5 Discos e particoes | 0 pra parar: " resposta
@@ -118,8 +115,6 @@ while true; do
                         ;;
                 esac
             done
-            ;;
-
             ;;
 
         4)
