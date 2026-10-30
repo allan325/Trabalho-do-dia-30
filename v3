@@ -11,6 +11,7 @@ while true; do
     read -r -p "Escolha uma opção: " tipo || break
 
     case "$tipo" in
+
         0)
             break
             ;;
@@ -19,17 +20,20 @@ while true; do
             read -r -p "Digite caminho do arquivo: " origem
             read -r -p "Digite o novo nome do arquivo: " novo
 
-            if [ ! -f "$origem" ]; then
+            if [ -z "$origem" ] || [ -z "$novo" ]; then
+                echo "Erro: os campos nao podem ficar vazios"
+
+            elif [ ! -f "$origem" ]; then
                 echo "Arquivo nao encontrado"
+
+            elif [ -e "$novo" ]; then
+                echo "Ja existe um arquivo ou diretorio com esse nome"
+
             else
-                if [ -e "$novo" ]; then
-                    echo "Ja existe um arquivo ou diretorio com esse nome"
+                if mv -- "$origem" "$novo"; then
+                    echo "Voce mudou o nome do arquivo $origem para $novo"
                 else
-                    if mv -- "$origem" "$novo"; then
-                        echo "Voce mudou o nome do arquivo $origem para $novo"
-                    else
-                        echo "Erro ao renomear o arquivo"
-                    fi
+                    echo "Erro ao renomear o arquivo"
                 fi
             fi
             ;;
@@ -38,32 +42,38 @@ while true; do
             read -r -p "Digite o nome do arquivo que vc quer fazer a copia: " origem
             read -r -p "Digite o nome da copia: " novo
 
-            if [ ! -f "$origem" ]; then
+            if [ -z "$origem" ] || [ -z "$novo" ]; then
+                echo "Erro: os campos nao podem ficar vazios"
+
+            elif [ ! -f "$origem" ]; then
                 echo "Arquivo nao encontrado"
+
+            elif [ -e "$novo" ]; then
+                echo "Ja existe um arquivo ou diretorio com esse nome"
+
             else
-                if [ -e "$novo" ]; then
-                    echo "Ja existe um arquivo ou diretorio com esse nome"
+                if cp -- "$origem" "$novo"; then
+                    echo "Voce fez uma copia do arquivo $origem e o nome e $novo"
                 else
-                    if cp -- "$origem" "$novo"; then
-                        echo "Voce fez uma copia do arquivo $origem é o nome é $novo"
-                    else
-                        echo "Erro em fazer copia o arquivo"
-                    fi
+                    echo "Erro em fazer copia o arquivo"
                 fi
             fi
-            ;;           
+            ;;
+
         3)
             while true; do
-                  echo "1 - Espaco em disco "
-                  echo "2 - Tamanho de uma pasta "
-                  echo "3 - Tamanho das pastas "
-                  echo "4 - Maiores itens"
-                  echo "5 - Discos e partições"
-                  echo "0 - Sair"
+                echo
+                echo "1 - Espaco em disco"
+                echo "2 - Tamanho de uma pasta"
+                echo "3 - Tamanho das pastas"
+                echo "4 - Maiores itens"
+                echo "5 - Discos e partições"
+                echo "0 - Sair"
 
-                  read -r -p "Escolha uma opção: " resposta
+                read -r -p "Escolha uma opção: " resposta
 
                 case "$resposta" in
+
                     0)
                         break
                         ;;
@@ -133,7 +143,9 @@ while true; do
 
         4)
             echo "Procurando arquivos e pasta com mais de 30 dias"
-            find  "$HOME"  -mtime +30 -print 2>/dev/null
+
+            find "$HOME" -type f -mtime +30 -print 2>/dev/null
+
             echo "Busca finalizada."
             ;;
 
